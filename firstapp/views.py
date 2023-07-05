@@ -101,7 +101,5 @@ class EmployeeListView(View):
         employee_form = EmployeeForm()
         employees = Employee.objects.all()
 
-        return render(request, 'employees.html', {'employee_form': employee_form, 'excel_form': excel_form, 'employees_df': employees_html})
+        return render(request, 'employees.html', {'employee_form': employee_form})
 
-
-# 

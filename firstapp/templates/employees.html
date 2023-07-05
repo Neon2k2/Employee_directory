@@ -2,64 +2,27 @@
 {% load static %}
 
 {% block stylesheets %}
-{{ block.super }}
-<link rel="stylesheet" href="{% static 'employees.css' %}">
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'employees.css' %}">
 {% endblock stylesheets %}
 
 {% block title %}CGI | Welcome{% endblock title %}
+
 {% block content %}
 <div class="container">
     <div class="row">
         <div>
             <form id="manualEntryForm" class="col-md-8 border p-4" method="POST" action="" style="display: none;">
                 {% csrf_token %}
-                <div class="mb-3">
-                    <label for="id_name" class="form-label">Name</label>
-                    {{ form.name }}
-                </div>
-                <div class="mb-3">
-                    <label for="id_phone" class="form-label">Phone</label>
-                    {{ form.phone }}
-                </div>
-                <div class="mb-3">
-                    <label for="id_dob" class="form-label">Date of Birth</label>
-                    {{ form.dob }}
-                </div>
-                <div class="mb-3">
-                    <label for="id_doj" class="form-label">Date of Joining</label>
-                    {{ form.doj }}
-                </div>
-                <div class="mb-3">
-                    <label for="id_address" class="form-label">Address</label>
-                    {{ form.address }}
-                </div>
-                <div class="mb-3">
-                    <label for="id_city" class="form-label">City</label>
-                    {{ form.city }}
-                </div>
-                <div class="mb-3">
-                    <label for="id_state" class="form-label">State</label>
-                    {{ form.state }}
-                </div>
-                <div class="mb-3">
-                    <label for="id_team" class="form-label">Team</label>
-                    {{ form.team }}
-                </div>
-                <div class="mb-3">
-                    <label for="id_salary" class="form-label">Salary</label>
-                    {{ form.salary }}
-                </div>
-                <button type="submit" class="btn btn-primary">Add New Employee</button>
+                {{ form.as_p }}
+                <button type="submit" name="employee_form_submit" class="btn btn-primary">Add New Employee</button>
             </form>
-            <form id="fileUploadForm" class='col-md-12 mt-4 d-flex justify-content-start' method="POST" action="" enctype="multipart/form-data"  style="display: none;">
+            <form id="fileUploadForm" class='col-md-12 mt-4 d-flex justify-content-start' method="POST" action="" enctype="multipart/form-data" style="display: none;">
                 {% csrf_token %}
         
                 <input type="file" class="form-control" id="fileInput" name="files" accept=".xlsx">
                 <button type="submit" name="excel_form_submit" class="btn btn-success text-center" style="width:250px;">Import Data</button>
             </form>
-            
-            
-            
             
             {% if upload_success %}
             <p class="success-message">{{ upload_success }}</p>
@@ -76,9 +39,8 @@
     </div>
 </div>
 
-
-<div class="container mt-4">
-    <table class="table table-bordered" >
+<div class="container mt-4" style="margin-bottom: 20%;">
+    <table class="table table-bordered">
         <thead class="thead-dark">
             <tr>
                 <th>Name</th>
@@ -108,10 +70,10 @@
             {% endfor %}
         </tbody>
     </table>
+    <div class="text-center">
+        <a href="{% url 'download_employees' %}?format=csv" class="btn btn-success">Download CSV</a>
+    </div>
 </div>
 
-<div class="text-center">
-    <a href="{% url 'download_employees' %}?format=csv" class="btn btn-success">Download CSV</a>
-</div>
 
 {% endblock content %}
