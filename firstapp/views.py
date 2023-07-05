@@ -36,8 +36,9 @@ class DownloadEmployeesView(View):
         excel_file.seek(0)
 
         # Create the HTTP response with the Excel file
+        date = datetime.now()
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=employees.xlsx'
+        response['Content-Disposition'] = f'attachment; filename=EmployeesRecords{date}.xlsx'
         response.write(excel_file.getvalue())
 
         return response
@@ -56,8 +57,7 @@ class EmployeeListView(View):
             if form.is_valid():
                 form.save()
                 return redirect('employee_list')
-            employees = Employee.objects.all()
-            return render(request, 'employees.html', {'form': form, 'employees': employees})
+
         
         if 'excel_form_submit' in request.POST:
             file = request.FILES['files']
@@ -95,11 +95,8 @@ class EmployeeListView(View):
             # Create Employee objects from the data
             for employee_data in data:
                 Employee.objects.create(**employee_data)
-
-            return render(request, 'employees.html')
+            return redirect('employee_list')
 
         employee_form = EmployeeForm()
-        employees = Employee.objects.all()
-
         return render(request, 'employees.html', {'employee_form': employee_form})
 
