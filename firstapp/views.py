@@ -5,7 +5,7 @@ import pandas as pd
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.views import View
-from .forms import EmployeeForm, ExcelUploadForm
+from .forms import EmployeeForm
 from .models import Employee, ExcelFile
 import io
 from django.conf import settings

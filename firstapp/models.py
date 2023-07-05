@@ -16,7 +16,7 @@ class Employee(models.Model):
         if value.year > 2005:
             raise ValidationError("Invalid date of birth. Year must be less than 2005")
 
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     phone = models.CharField(validators=[phone_regex], max_length=15, unique=True)
     dob = models.DateField(validators=[validate_dob])
     doj = models.DateField()

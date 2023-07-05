@@ -5,24 +5,36 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="{% static 'firstapp/static/employees.css' %}" />
+    {% load bootstrap5 %}
+  {% bootstrap_css %}
+  
     
-
+    <!-- <link rel="stylesheet" href="{% static 'employees.css' %}"> -->
     <title>{% block title %}Employees Data{% endblock title %}</title>
   </head>
   <body>
-    <header>
-      <div class="container container-fluid">
-        <div>
-            <h2>Employees Details</h2>
-        </div>
-    </header>
+    <header class="p-3 bg-primary text-white border">
+      <div class="container container-fluid text-center">
+          <div>
+              <h2 class="text-light font-weight-bold" style="font-family: 'Arial', sans-serif;">Employees Details</h2>
+          </div>
+      </div>
+  </header>
+  
+  
+  
     <main>
     {% block content %}
     {% endblock content %}
     </main>
-    <footer>
-    <p>Demo project by gaurish</p>
+
+
+    <footer class="p-3 mt-4 bg-dark text-white">
+      <script src="{% static 'employees.js' %}"></script>
+        <div class="container container-fluid text-center">
+            <p class="text-muted mb-0">Demo project by gaurish</p>
+        </div>
     </footer>
+    
   </body>
 </html>
