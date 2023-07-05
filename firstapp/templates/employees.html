@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}CGI | Welcome{% endblock title %}
+
+
+
+{% block stylesheets %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/employees.css' %}">
+{% endblock stylesheets %}
+
+
+{% block content %}
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" name="employee_form_submit">Add Employee</button>
+    </form>
+
+    <form method="POST" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="files" accept=".xlsx">
+        <button type="submit" name="excel_form_submit">Import Data</button>
+    </form>
+
+    {% if upload_success %}
+        <p class="success-message">{{ upload_success }}</p>
+    {% endif %}
+
+    {% if upload_error %}
+        <p class="error-message">{{ upload_error }}</p>
+    {% endif %}
+
+    <table class="employees-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>DOB</th>
+                <th>DOJ</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Team</th>
+                <th>Salary</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in employees %}
+                <tr>
+                    <td>{{ employee.name }}</td>
+                    <td>{{ employee.phone }}</td>
+                    <td>{{ employee.dob }}</td>
+                    <td>{{ employee.doj }}</td>
+                    <td>{{ employee.address }}</td>
+                    <td>{{ employee.city }}</td>
+                    <td>{{ employee.state }}</td>
+                    <td>{{ employee.team }}</td>
+                    <td>{{ employee.salary }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'download_employees' %}?format=csv">Download CSV</a>
+{% endblock content %}
