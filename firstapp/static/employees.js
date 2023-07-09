@@ -13,4 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
         manualEntryForm.style.display = 'none';
         fileUploadForm.style.display = 'block';
     });
+
+
+
 });

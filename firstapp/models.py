@@ -8,6 +8,11 @@ class Employee(models.Model):
         regex=r'^\+?\d{10,15}$',
         message="Phone number must be entered in the format: '+919999999999'. Up to 15 digits allowed."
     )
+    GENDER_CHOICES = [
+    ('M', 'Male'),
+    ('F', 'Female'),
+    ('O', 'Other'),
+]
 
     def validate_dob(value):
         # Custom validation logic for DOB
@@ -19,6 +24,7 @@ class Employee(models.Model):
     name = models.CharField(max_length=100, unique=True)
     phone = models.CharField(validators=[phone_regex], max_length=15, unique=True)
     dob = models.DateField(validators=[validate_dob])
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='Male')
     doj = models.DateField()
     address = models.CharField(max_length=250)
     city = models.CharField(max_length=25)

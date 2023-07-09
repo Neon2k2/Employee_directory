@@ -13,7 +13,7 @@
     <title>{% block title %}Employees Data{% endblock title %}</title>
   </head>
   <body>
-    <header class="p-3 bg-primary text-white border">
+    <header class="p-3 text-white border" style="background-color: #146C94;">
       <div class="container container-fluid text-center">
           <div>
               <h2 class="text-light font-weight-bold" style="font-family: 'Arial', sans-serif;">Employees Details</h2>
@@ -31,8 +31,9 @@
 
     <footer class="p-3 mt-5 bg-dark text-white fixed-bottom">
       <script src="{% static 'employees.js' %}"></script>
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
       <div class="container container-fluid text-center">
-        <p class="text-muted mb-0">Employees Record</p>
+        <p class="text-muted mb-0">Django Demo Project</p>
       </div>
     </footer>
     

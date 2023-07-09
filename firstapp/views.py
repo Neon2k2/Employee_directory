@@ -1,5 +1,7 @@
 
 from datetime import datetime
+from django.db import IntegrityError
+from django.urls import reverse
 import openpyxl
 import pandas as pd
 from django.http import HttpResponse, JsonResponse
@@ -9,6 +11,8 @@ from .forms import EmployeeForm
 from .models import Employee, ExcelFile
 import io
 from django.conf import settings
+from django.contrib import messages
+
 
 class DownloadEmployeesView(View):
     def get(self, request):
@@ -37,12 +41,12 @@ class DownloadEmployeesView(View):
 
         # Create the HTTP response with the Excel file
         date = datetime.now()
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response = HttpResponse(
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Content-Disposition'] = f'attachment; filename=EmployeesRecords{date}.xlsx'
         response.write(excel_file.getvalue())
 
         return response
-    
 
 
 class EmployeeListView(View):
@@ -56,9 +60,10 @@ class EmployeeListView(View):
             form = EmployeeForm(request.POST)
             if form.is_valid():
                 form.save()
-                return redirect('employee_list')
+                messages.success(
+                    request, 'Employee added successfully to the database.')
+                return redirect(reverse('employee_list'))
 
-        
         if 'excel_form_submit' in request.POST:
             file = request.FILES['files']
 
@@ -94,9 +99,22 @@ class EmployeeListView(View):
 
             # Create Employee objects from the data
             for employee_data in data:
-                Employee.objects.create(**employee_data)
-            return redirect('employee_list')
+                try:
+                    Employee.objects.create(**employee_data)
+                except IntegrityError as e:
+                    error_message = f"Error creating employee: This employee already exists."
+                    messages.error(request, error_message)
+                    # Redirect to employee list page with the error message
+                    return redirect(reverse('employee_list'))
+                except Exception as e:
+                    error_message = f"Error creating employee: {str(e)}"
+                    messages.error(request, error_message)
+                    # Redirect to employee list page with the error message
+                    return redirect(reverse('employee_list'))
+
+
+            messages.success(request, 'Excel File uploaded successfully')
+            return redirect(reverse('employee_list'))
 
         employee_form = EmployeeForm()
         return render(request, 'employees.html', {'employee_form': employee_form})
-
