@@ -14,7 +14,6 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.paginator import Paginator
 
-
 class DownloadEmployeesView(View):
     def get(self, request):
         employees = Employee.objects.all()
@@ -55,21 +54,31 @@ class EmployeeListView(View):
         form = EmployeeForm()
         employees = Employee.objects.all()
         sort = request.GET.get('sort')
-
-        # Apply sorting logic based on the sorting parameter
+        order = request.GET.get('order')
         if sort == 'name':
             employees = employees.order_by('name')
         elif sort == 'doj':
             employees = employees.order_by('doj')
+        elif sort == 'city':
+            employees = employees.order_by('city')
+        elif sort == 'state':
+            employees = employees.order_by('state')
+        elif sort == 'team':
+            employees = employees.order_by('team')
         elif sort == 'salary':
             employees = employees.order_by('salary')
+
+        if sort and order == 'desc':
+            employees = employees.reverse()
+        else:
+            order = 'asc'
 
         paginator = Paginator(employees, per_page=settings.PAGINATION_PER_PAGE)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
-
         CurrentDate = datetime.now().date()
-        return render(request, 'employees.html', {'form': form, 'page_obj': page_obj, 'sort': sort, 'date': CurrentDate})
+        return render(request, 'employees.html', {'form': form, 'page_obj': page_obj, 'date': CurrentDate, 'sort': sort, 'order': order})
+
 
     def post(self, request):
         if 'employee_form_submit' in request.POST:
@@ -127,6 +136,7 @@ class EmployeeListView(View):
                     messages.error(request, error_message)
                     # Redirect to employee list page with the error message
                     return redirect(reverse('employee_list'))
+
 
             messages.success(request, 'Excel File uploaded successfully')
             return redirect(reverse('employee_list'))

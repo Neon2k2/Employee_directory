@@ -8,7 +8,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   {% load bootstrap5 %}
   {% bootstrap_css %}
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
@@ -40,9 +39,41 @@
     <div class="container container-fluid text-center">
       <p class="text-muted mb-0">Django Demo Project</p>
     </div>
+
+    <script>
+      debugger;
+      
+      document.addEventListener('DOMContentLoaded', function() {
+        
+          const manualEntryBtn = document.getElementById('manualEntryBtn');
+          const manualEntryForm = document.getElementById('manualEntryForm');
+          const fileUploadBtn = document.getElementById('fileUploadBtn');
+          const fileUploadForm = document.getElementById('fileUploadForm');
+          const UploadForm = document.getElementById('UploadForm');
+      
+          // Hide the fileUploadForm initially
+          UploadForm.style.display = 'none';
+      
+          manualEntryBtn.addEventListener('click', function() {
+            debugger;
+            manualEntryForm.style.display = 'block';
+            UploadForm.style.display = 'none';
+          });
+      
+          fileUploadBtn.addEventListener('click', function() {
+            debugger;
+              manualEntryForm.style.display = 'none';
+              UploadForm.style.display = 'block';
+          });
+      });
+      </script>
   </footer>
 
 
 </body>
 
 </html>
+
+
+
+  

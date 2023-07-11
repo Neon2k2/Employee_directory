@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'firstapp',
     'bootstrap5',
-    # 'pagination',
+    'fontawesome_5',
 ]
 
 MIDDLEWARE = [
