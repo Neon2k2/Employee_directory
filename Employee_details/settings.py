@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'firstapp',
     'bootstrap5',
+    # 'pagination',
 ]
 
 MIDDLEWARE = [
@@ -128,3 +129,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 DATETIME_FORMAT = "%Y-%m-%d, %H:%M:%S"
 
+PAGINATION_PER_PAGE = 10  # Set the number of items per page

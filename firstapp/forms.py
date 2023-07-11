@@ -100,6 +100,7 @@ class EmployeeForm(forms.ModelForm):
             ('satara', 'Satara'),
             ('solapur', 'Solapur'),
             ('srinagar', 'Srinagar'),
+            ('sangli', 'Sangli'),
             ('surat', 'Surat'),
             ('thane', 'Thane'),
             ('tiruchirappalli', 'Tiruchirappalli'),

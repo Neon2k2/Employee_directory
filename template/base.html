@@ -1,42 +1,48 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    {% load bootstrap5 %}
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  {% load bootstrap5 %}
   {% bootstrap_css %}
-  
-    
-    <!-- <link rel="stylesheet" href="{% static 'employees.css' %}"> -->
-    <title>{% block title %}Employees Data{% endblock title %}</title>
-  </head>
-  <body>
-    <header class="p-3 text-white border" style="background-color: #146C94;">
-      <div class="container container-fluid text-center">
-          <div>
-              <h2 class="text-light font-weight-bold" style="font-family: 'Arial', sans-serif;">Employees Details</h2>
-          </div>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+   
+  <!-- <link rel="stylesheet" href="{% static 'employees.css' %}"> -->
+  <title>{% block title %}Employees Data{% endblock title %}</title>
+</head>
+
+<body>
+  <header class="p-3 text-white border" style="background-color: #146C94;">
+    <div class="container container-fluid text-center">
+      <div>
+        <h2 style="font-family: 'Anton', sans-serif;">Employee Record</h2>
       </div>
+    </div>
   </header>
-  
-  
-  
-    <main>
+
+
+
+  <main>
     {% block content %}
     {% endblock content %}
-    </main>
+  </main>
 
 
-    <footer class="p-3 mt-5 bg-dark text-white fixed-bottom">
-      <script src="{% static 'employees.js' %}"></script>
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-      <div class="container container-fluid text-center">
-        <p class="text-muted mb-0">Django Demo Project</p>
-      </div>
-    </footer>
-    
-    
-  </body>
+  <footer class="p-3 mt-5 bg-dark text-white fixed-bottom">
+    <script src="{% static 'employees.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <div class="container container-fluid text-center">
+      <p class="text-muted mb-0">Django Demo Project</p>
+    </div>
+  </footer>
+
+
+</body>
+
 </html>
