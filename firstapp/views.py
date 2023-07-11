@@ -52,7 +52,7 @@ class DownloadEmployeesView(View):
 class EmployeeListView(View):
     def get(self, request):
         form = EmployeeForm()
-        employees = Employee.objects.all()
+        employees = Employee.objects.all().order_by('-created_at')
         sort = request.GET.get('sort')
         order = request.GET.get('order')
         if sort == 'name':
