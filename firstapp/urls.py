@@ -1,8 +1,10 @@
 from django.urls import path
 
-from firstapp.views import DownloadEmployeesView, EmployeeListView
+from firstapp.views import DownloadEmployeesPDFView, DownloadEmployeesView, EmployeeListView, ManualEntry
 
 urlpatterns = [
     path('', EmployeeListView.as_view(), name='employee_list'),
     path('download/', DownloadEmployeesView.as_view(), name='download_employees'),
+    path('downloadpdf/', DownloadEmployeesPDFView.as_view(), name='download_pdf'),
+    path('manualEntry/', ManualEntry.as_view(), name='manualEntry'),
 ]

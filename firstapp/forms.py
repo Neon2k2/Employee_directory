@@ -1,3 +1,4 @@
+import re
 from django import forms
 from django.forms.widgets import DateInput
 from datetime import datetime, timezone
@@ -160,16 +161,16 @@ class EmployeeForm(forms.ModelForm):
 
         Date_ = datetime.now().strftime('%Y-%m-%d')
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Write Employee\'s Name'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control','placeholder': 'start with +91'}),
             'gender' : forms.Select(choices=GENDER_CHOICES, attrs={'class': 'form-control'}),
-            'dob': CustomDateInput(attrs={'class': 'form-control'}, min_date='1964-01-31', max_date='2002-12-31'),
-            'doj': CustomDateInput(attrs={'class': 'form-control'}, min_date='1990-01-01', max_date = f'{Date_}'),
-            'address': forms.TextInput(attrs={'class': 'form-control'}),
-            'city': forms.Select(choices=CITY_CHOICES, attrs={'class': 'form-control'}),
-            'state': forms.Select(choices=STATE_CHOICES, attrs={'class': 'form-control'}),
-            'team': forms.TextInput(attrs={'class': 'form-control'}),
-            'salary': forms.NumberInput(attrs={'class': 'form-control', 'min': '0', 'step': '1000'}),
+            'dob': CustomDateInput(attrs={'class': 'form-control','placeholder': 'Date of Birth'}, min_date='1964-01-31', max_date='2002-12-31'),
+            'doj': CustomDateInput(attrs={'class': 'form-control','placeholder': 'Date of Joining'}, min_date='1990-01-01', max_date = f'{Date_}'),
+            'address': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Enter the Address'}),
+            'city': forms.Select(choices=CITY_CHOICES, attrs={'class': 'form-control','placeholder': 'Enter the City'}),
+            'state': forms.Select(choices=STATE_CHOICES, attrs={'class': 'form-control','placeholder': 'Enter the State'}),
+            'team': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Team Name or Code'}),
+            'salary': forms.NumberInput(attrs={'class': 'form-control', 'min': '0', 'step': '1000','placeholder': 'Yearly Package'}),
         }
 
 
@@ -191,5 +192,13 @@ class EmployeeForm(forms.ModelForm):
             raise forms.ValidationError("Salary must be a positive value.")
         return salary
     
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+        pattern = r'^\+?91?[6-9]\d{9}$'
+        if not re.match(pattern, phone):
+            raise forms.ValidationError("Please enter a valid phone number.")
+        return phone
+    
+
 
 

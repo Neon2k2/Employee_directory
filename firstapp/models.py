@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 
 class Employee(models.Model):
     phone_regex = RegexValidator(
-        regex=r'^\+?\d{10,15}$',
+        regex=r'^\+?91?[6-9]\d{9}$',
         message="Phone number must be entered in the format: '+919999999999'. Up to 15 digits allowed."
     )
     GENDER_CHOICES = [

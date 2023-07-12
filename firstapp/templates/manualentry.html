@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block stylesheets %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'employees.css' %}">
+{% endblock stylesheets %}
+
+{% block title %}CGI | Welcome{% endblock title %}
+
+{% block content %}
+
+<div class="container" style="margin-bottom: 10%;">
+    
+    <div class="row">
+        
+        
+        <form class="mt-5 col-md-8 offset-md-2 col-lg-6 offset-lg-3 border p-4 shadow-sm" method="POST">
+            {% csrf_token %}
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                <strong>Error:</strong>
+                <ul>
+                    {% for field in form %}
+                    {% for error in field.errors %}
+                    <li>{{ field.label }} - {{ error }}</li>
+                    {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            <div class="row mb-3 text-center">
+                <h5 style="font-family: 'Prompt', sans-serif;">Enter the Details</h5>
+                <hr>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 mb-3" style="font-family: 'Prompt', sans-serif;">
+                    {{ form.name.label_tag }}
+                    {{ form.name }}
+                </div>
+                <div class="col-sm-6 mb-3"style="font-family: 'Prompt', sans-serif;">
+                    {{ form.phone.label_tag }}
+                    {{ form.phone }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 mb-3"style="font-family: 'Prompt', sans-serif;">
+                    {{ form.gender.label_tag }}
+                    {{ form.gender }}
+                </div>
+                <div class="col-sm-6 mb-3"style="font-family: 'Prompt', sans-serif;">
+                    {{ form.dob.label_tag }}
+                    {{ form.dob }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 mb-3"style="font-family: 'Prompt', sans-serif;">
+                    {{ form.address.label_tag }}
+                    {{ form.address }}
+                </div>
+                <div class="col-sm-6 mb-3"style="font-family: 'Prompt', sans-serif;">
+                    {{ form.city.label_tag }}
+                    {{ form.city }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 mb-3"style="font-family: 'Prompt', sans-serif;">
+                    {{ form.state.label_tag }}
+                    {{ form.state }}
+                </div>
+                <div class="col-sm-6 mb-3"style="font-family: 'Prompt', sans-serif;">
+                    {{ form.team.label_tag }}
+                    {{ form.team }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 mb-3"style="font-family: 'Prompt', sans-serif;">
+                    {{ form.salary.label_tag }}
+                    {{ form.salary }}
+                </div>
+                <div class="col-sm-6 mb-3"style="font-family: 'Prompt', sans-serif;">
+                    {{ form.doj.label_tag }}
+                    {{ form.doj }}
+                </div>
+            </div>
+
+            <button type="submit" name="employee_form_submit" class="btn text-white" style="background-color: #5584AC; font-family: 'Prompt', sans-serif;">Add New Employee</button>
+            <a href="{%url 'employee_list' %}" class="btn text-white" style="background-color: rgba(231, 100, 80, 0.844); font-family: 'Prompt', sans-serif;">Cancel</a>
+        </form>
+        
+    </div>
+</div>
+
+
+{% endblock content %}

@@ -10,17 +10,17 @@
   {% bootstrap_css %}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
-   
+  <link href="https://fonts.googleapis.com/css2?family=Prompt&display=swap" rel="stylesheet">
+
   <!-- <link rel="stylesheet" href="{% static 'employees.css' %}"> -->
   <title>{% block title %}Employees Data{% endblock title %}</title>
 </head>
 
 <body>
   <header class="p-3 text-white border" style="background-color: #146C94;">
-    <div class="container container-fluid text-center">
+    <div class="container container-fluid">
       <div>
-        <h2 style="font-family: 'Anton', sans-serif;">Employee Record</h2>
+        <h2 style="font-family: 'Prompt', sans-serif;">Employees Directory</h2>
       </div>
     </div>
   </header>
@@ -41,36 +41,25 @@
     </div>
 
     <script>
-      
-      document.addEventListener('DOMContentLoaded', function() {
-        
-          const manualEntryBtn = document.getElementById('manualEntryBtn');
-          const manualEntryForm = document.getElementById('manualEntryForm');
-          const fileUploadBtn = document.getElementById('fileUploadBtn');
-          const fileUploadForm = document.getElementById('fileUploadForm');
-          const UploadForm = document.getElementById('UploadForm');
-      
-          // Hide the fileUploadForm initially
-          UploadForm.style.display = 'none';
-      
-          manualEntryBtn.addEventListener('click', function() {
-            manualEntryForm.style.display = 'block';
-            UploadForm.style.display = 'none';
-          });
-      
-          fileUploadBtn.addEventListener('click', function() {
-              manualEntryForm.style.display = 'none';
-              UploadForm.style.display = 'block';
-          });
+      document.addEventListener('DOMContentLoaded', function () {
+
+        const fileUploadBtn = document.getElementById('fileUploadBtn');
+        const fileUploadForm = document.getElementById('fileUploadForm');
+
+        // Hide the fileUploadForm initially
+        fileUploadForm.style.display = 'none';
+
+        fileUploadBtn.addEventListener('click', function () {
+          fileUploadForm.style.display = 'block';
+
+        });
       });
-      </script>
+
+
+    </script>
   </footer>
 
 
 </body>
 
 </html>
-
-
-
-  
