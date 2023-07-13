@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="{% static 'employees.css' %}">
 {% endblock stylesheets %}
 
-{% block title %}CGI | Welcome{% endblock title %}
+{% block title %}ED | Employee Directory{% endblock title %}
 
 {% block content %}
 <div class="container-fluid" style="font-family: 'Prompt', sans-serif;">
@@ -15,11 +15,20 @@
         <button id="fileUploadBtn" class="btn text-white" style="margin-right: 2%; background-color: #0D4C92;">Import Excel</button>
         <a href="{% url 'manualEntry' %}" class="btn text-white" style="margin-right: 2%; background-color: #0D4C92;">Add Manually</a>
         <a href="{% url 'download_employees' %}?format=csv" class="btn text-white" style="margin-right: 2%; background-color: #1F8A70;">Download Excel</a>
-        <a href="{% url 'download_pdf' %}?format=csv" class="btn text-white" style="background-color: #FF6D60;">Download PDF</a>
+        <a href="{% url 'download_pdf' %}?format=csv" class="btn text-white" style="background-color: #D61355;">Download PDF</a>
       </div>
       <div class="d-flex col-md-4 mt-4">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search employee" style="padding-left: 2.375rem;">
+            <div class="input-group-append">
+                <button class="btn" type="button" style="background-color:#0D4C92;">
+                    <i class="fa fa-search" style="color: white;"></i>
+                </button>
+            </div>
+        </div>
+        
     </div>
-      <div class="d-flex col-md-2 mt-4  pr-0 flex-row=reverse">
+      <div class="d-flex col-md-2 pr-0 flex-row=reverse" style="margin-top: 2%;">
 
         <span id="edit-toggle">View Mode</span>
         <div class="custom-control ml-2 custom-switch">
