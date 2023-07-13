@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', function () {
 function toggleEditMode() {
     var tableRows = document.getElementsByTagName('tr');
     var editToggle = document.getElementById('edit-toggle');
-    if (editToggle.innerHTML === 'Toggle Edit Mode') {
-      editToggle.innerHTML = 'Toggle View Mode';
+    if (editToggle.innerHTML === 'View Mode') {
+      editToggle.innerHTML = 'Edit Mode';
       for (var i = 0; i < tableRows.length; i++) {
         var cells = tableRows[i].getElementsByTagName('td');
         for (var j = 0; j < cells.length; j++) {
@@ -25,7 +25,7 @@ function toggleEditMode() {
         }
       }
     } else {
-      editToggle.innerHTML = 'Toggle Edit Mode';
+      editToggle.innerHTML = 'View Mode';
       for (var i = 0; i < tableRows.length; i++) {
         var cells = tableRows[i].getElementsByTagName('td');
         for (var j = 0; j < cells.length; j++) {
@@ -40,8 +40,8 @@ function toggleEditMode() {
   function toggleEditMode() {
     var tableRows = document.getElementsByTagName('tr');
     var editToggle = document.getElementById('edit-toggle');
-    if (editToggle.innerHTML === 'Toggle Edit Mode') {
-      editToggle.innerHTML = 'Toggle View Mode';
+    if (editToggle.innerHTML === 'View Mode') {
+      editToggle.innerHTML = 'Edit Mode';
       for (var i = 0; i < tableRows.length; i++) {
         var cells = tableRows[i].getElementsByTagName('td');
         for (var j = 0; j < cells.length; j++) {
@@ -49,7 +49,7 @@ function toggleEditMode() {
         }
       }
     } else {
-      editToggle.innerHTML = 'Toggle Edit Mode';
+      editToggle.innerHTML = 'View Mode';
       for (var i = 0; i < tableRows.length; i++) {
         var cells = tableRows[i].getElementsByTagName('td');
         for (var j = 0; j < cells.length; j++) {

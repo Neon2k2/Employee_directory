@@ -11,6 +11,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Prompt&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+  <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
+    rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 
   <!-- <link rel="stylesheet" href="{% static 'employees.css' %}"> -->
   <title>{% block title %}Employees Data{% endblock title %}</title>
@@ -18,7 +27,7 @@
 
 <body>
   <header class="p-3 text-white border" style="background-color: #0D4C92;">
-    <div class="container container-fluid">
+    <div class="container-fluid">
       <div>
         <h2 style="font-family: 'Prompt', sans-serif;">Employees Directory</h2>
       </div>
@@ -33,22 +42,9 @@
   </main>
 
 
-  <footer class="p-3 mt-5 bg-dark text-white fixed-bottom">
+  <footer>
     <script src="{% static 'employees.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <div class="container container-fluid text-center">
-      <p class="text-muted mb-0">Django Demo Project</p>
-    </div>
-
-    <script>
-      
-
-
-    </script>
-    <script>
-      
-    </script>
-
   </footer>
 
 

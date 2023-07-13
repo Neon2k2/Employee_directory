@@ -9,48 +9,51 @@
 {% block title %}CGI | Welcome{% endblock title %}
 
 {% block content %}
-<div class="container" style="font-family: 'Prompt', sans-serif;">
-    
+<div class="container-fluid" style="font-family: 'Prompt', sans-serif;">
     <div class="row">
+      <div class="d-flex col-md-6 pl-5 mt-4">
+        <button id="fileUploadBtn" class="btn text-white" style="margin-right: 2%; background-color: #0D4C92;">Import Excel</button>
+        <a href="{% url 'manualEntry' %}" class="btn text-white" style="margin-right: 2%; background-color: #0D4C92;">Add Manually</a>
+        <a href="{% url 'download_employees' %}?format=csv" class="btn text-white" style="margin-right: 2%; background-color: #1F8A70;">Download CSV</a>
+        <a href="{% url 'download_pdf' %}?format=csv" class="btn text-white" style="background-color: #1F8A70;">Download PDF</a>
+      </div>
+      <div class="d-flex col-md-2 mt-4">
+      </div>
+      <div class="d-flex col-md-2 mt-4 align-items-center">
 
-        <div class="col-md-8 mt-4">
-            <button id="fileUploadBtn" class="btn text-white"
-                style="margin-right: 2%; background-color: #0D4C92;">Import Excel</button>
-            <a href="{% url 'manualEntry' %}" class="btn text-white" style="margin-right: 2%; background-color: #0D4C92;">Add Manually</a>
-            <button id="edit-toggle" class="btn text-white" style="margin-right: 2%; background-color: #0D4C92;" onclick="toggleEditMode()">Toggle Edit Mode</button>
-            
-
-        </div>
-        <div>
-
-            {% if messages %}
-            <div class="messages row mt-3">
-                {% for message in messages %}
-                <p {% if message.tags %} class="{{ message.tags }} text-primary" {% endif %}>{{ message }}</p>
-                {% endfor %}
-            </div>
-            {% endif %}
-            
-            <form id="fileUploadForm" class="mt-5 col-md-12 border p-4" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <input type="file" class="form-control" id="fileUploadInput" name="files" accept=".xlsx">
-                <button type="submit" name="excel_form_submit" class="mt-3 btn btn-success text-center" style="width: 250px;">Upload</button>
-                <a href="{%url 'employee_list' %}" class="btn text-white mt-3 text-center" style="background-color: rgba(231, 100, 80, 0.844); font-family: 'Prompt', sans-serif;">Cancel</a>
-            </form>
-
-
-            {% if upload_success %}
-            <p class="success-message">{{ upload_success }}</p>
-            {% endif %}
-
-            {% if upload_error %}
-            <p class="error-message">{{ upload_error }}</p>
-            {% endif %}
-        </div>
+        <span id="edit-toggle">View Mode</span>
+        <div class="custom-control ml-2 custom-switch">
+            <input type="checkbox" class="custom-control-input" id="customSwitches" onchange="toggleEditMode()">
+            <label class="custom-control-label" for="customSwitches"></label>
+            </body>
+      </div>
     </div>
-</div>
+    <div>
+      {% if messages %}
+      <div class="messages row mt-3">
+        {% for message in messages %}
+        <p {% if message.tags %} class="{{ message.tags }} text-primary" {% endif %}>{{ message }}</p>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <form id="fileUploadForm" class="mt-5 col-md-12 border p-4" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" class="form-control" id="fileUploadInput" name="files" accept=".xlsx">
+        <button type="submit" name="excel_form_submit" class="mt-3 btn btn-success text-center" style="width: 250px;">Upload</button>
+        <a href="{%url 'employee_list' %}" class="btn text-white mt-3 text-center" style="background-color: rgba(231, 100, 80, 0.844); font-family: 'Prompt', sans-serif;">Cancel</a>
+      </form>
+      {% if upload_success %}
+      <p class="success-message">{{ upload_success }}</p>
+      {% endif %}
+  
+      {% if upload_error %}
+      <p class="error-message">{{ upload_error }}</p>
+      {% endif %}
+    </div>
+  </div>
+  
 
-<div class="container mt-4" style="margin-bottom: 20%; font-family: 'Prompt', sans-serif;">
+<div class="container-fluid mt-4" style="font-family: 'Prompt', sans-serif;">
     
     <hr>
     <table class="table table-striped table-bordered">
@@ -178,7 +181,7 @@
             <a href="?page={{ page_obj.previous_page_number }}" class="btn text-white"
                 style="background-color: #0D4C92; margin-right: 2%; margin-left: 2%;">Previous</a>
             {% endif %}
-            <div class="current-page-box bg-success" style="padding: 5px 15px; display: inline-block;">
+            <div class="current-page-box text-white" style="padding: 5px 15px; display: inline-block; background-color: #1F8A70;">
                 <span class="current-page text-white" style="margin-left: 1% 2% 2%;">{{ page_obj.number }}</span>
             </div>
             {% if page_obj.has_next %}
@@ -188,8 +191,7 @@
                 style="background-color: #0D4C92;">Last &raquo;</a>
             {% endif %}
         </div>
-        <a href="{% url 'download_employees' %}?format=csv" class="btn btn-success">Download CSV</a>
-        <a href="{% url 'download_pdf' %}?format=csv" class="btn btn-success">Download PDF</a>
+
     </div>
 </div>
 
