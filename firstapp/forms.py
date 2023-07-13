@@ -162,7 +162,7 @@ class EmployeeForm(forms.ModelForm):
         Date_ = datetime.now().strftime('%Y-%m-%d')
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Write Employee\'s Name'}),
-            'phone': forms.TextInput(attrs={'class': 'form-control','placeholder': 'start with +91'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control','placeholder': '+910000000000'}),
             'gender' : forms.Select(choices=GENDER_CHOICES, attrs={'class': 'form-control'}),
             'dob': CustomDateInput(attrs={'class': 'form-control','placeholder': 'Date of Birth'}, min_date='1964-01-31', max_date='2002-12-31'),
             'doj': CustomDateInput(attrs={'class': 'form-control','placeholder': 'Date of Joining'}, min_date='1990-01-01', max_date = f'{Date_}'),

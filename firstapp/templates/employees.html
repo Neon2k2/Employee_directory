@@ -15,8 +15,10 @@
 
         <div class="col-md-8 mt-4">
             <button id="fileUploadBtn" class="btn text-white"
-                style="margin-right: 2%; background-color: #5584AC;">Import Excel</button>
-            <a href="{% url 'manualEntry' %}" class="btn btn-success">Add Manually</a>
+                style="margin-right: 2%; background-color: #0D4C92;">Import Excel</button>
+            <a href="{% url 'manualEntry' %}" class="btn text-white" style="margin-right: 2%; background-color: #0D4C92;">Add Manually</a>
+            <button id="edit-toggle" class="btn text-white" style="margin-right: 2%; background-color: #0D4C92;" onclick="toggleEditMode()">Toggle Edit Mode</button>
+            
 
         </div>
         <div>
@@ -53,7 +55,7 @@
     <hr>
     <table class="table table-striped table-bordered">
 
-        <thead class="text-white" style="background-color: #5584AC; ">
+        <thead class="text-white" style="background-color: #0D4C92; ">
             <tr>
                 <th>
                     Name
@@ -153,36 +155,37 @@
         </thead>
         <tbody class="thead-light">
             {% for employee in page_obj %}
-            <tr style="font-size: 12px;">
-                <td>{{ employee.name }}</td>
-                <td>{{ employee.phone }}</td>
-                <td>{{ employee.dob }}</td>
-                <td>{{ employee.doj }}</td>
-                <td>{{ employee.address }}</td>
-                <td>{{ employee.city }}</td>
-                <td>{{ employee.state }}</td>
-                <td>{{ employee.team }}</td>
-                <td>{{ employee.salary }}</td>
+            <tr style="font-size: 12px;" data-employee-id="{{ employee.id }}">
+                <td {% if not employee.editable %}contenteditable="false"{% endif %} data-field-name="name">{{ employee.name }}</td>
+                <td {% if not employee.editable %}contenteditable="false"{% endif %} data-field-name="phone">{{ employee.phone }}</td>
+                <td {% if not employee.editable %}contenteditable="false"{% endif %} data-field-name="dob">{{ employee.dob }}</td>
+                <td {% if not employee.editable %}contenteditable="false"{% endif %} data-field-name="doj">{{ employee.doj }}</td>
+                <td {% if not employee.editable %}contenteditable="false"{% endif %} data-field-name="address">{{ employee.address }}</td>
+                <td {% if not employee.editable %}contenteditable="false"{% endif %} data-field-name="city">{{ employee.city }}</td>
+                <td {% if not employee.editable %}contenteditable="false"{% endif %} data-field-name="state">{{ employee.state }}</td>
+                <td {% if not employee.editable %}contenteditable="false"{% endif %} data-field-name="team">{{ employee.team }}</td>
+                <td {% if not employee.editable %}contenteditable="false"{% endif %} data-field-name="salary">{{ employee.salary }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
     <hr>
+
     <div class="text-center">
         <div class="pagination">
             {% if page_obj.has_previous %}
-            <a href="?page=1" class="btn text-white" style="background-color: #5584AC;">&laquo; First</a>
+            <a href="?page=1" class="btn text-white" style="background-color: #0D4C92;">&laquo; First</a>
             <a href="?page={{ page_obj.previous_page_number }}" class="btn text-white"
-                style="background-color: #5584AC; margin-right: 2%; margin-left: 2%;">Previous</a>
+                style="background-color: #0D4C92; margin-right: 2%; margin-left: 2%;">Previous</a>
             {% endif %}
             <div class="current-page-box bg-success" style="padding: 5px 15px; display: inline-block;">
                 <span class="current-page text-white" style="margin-left: 1% 2% 2%;">{{ page_obj.number }}</span>
             </div>
             {% if page_obj.has_next %}
             <a href="?page={{ page_obj.next_page_number }}" class="btn text-white"
-                style=" background-color: #5584AC; margin-right: 2%; margin-left: 2%;">Next</a>
+                style=" background-color: #0D4C92; margin-right: 2%; margin-left: 2%;">Next</a>
             <a href="?page={{ page_obj.paginator.num_pages }}" class="btn text-white"
-                style="background-color: #5584AC;">Last &raquo;</a>
+                style="background-color: #0D4C92;">Last &raquo;</a>
             {% endif %}
         </div>
         <a href="{% url 'download_employees' %}?format=csv" class="btn btn-success">Download CSV</a>

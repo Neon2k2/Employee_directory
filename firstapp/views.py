@@ -1,12 +1,12 @@
 
 from datetime import datetime
+import json
 import pandas as pd
 from reportlab.pdfgen import canvas
 from django.db import IntegrityError
 from django.forms import ValidationError
 from django.urls import reverse
 import openpyxl
-import pandas as pd
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import redirect, render
 from django.views import View
@@ -16,10 +16,8 @@ import io
 from django.conf import settings
 from django.contrib import messages
 from django.core.paginator import Paginator
-
 from django.utils import timezone
 from reportlab.lib.pagesizes import letter
-from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 
@@ -51,16 +49,25 @@ class DownloadEmployeesPDFView(View):
             elements.append(Spacer(1, 12))  # Add space after the section title
 
             # Add employee details as section content
-            elements.append(Paragraph(f"Phone: {employee.phone}", section_content_style))
-            elements.append(Paragraph(f"Date of Birth: {employee.dob}", section_content_style))
-            elements.append(Paragraph(f"Date of Join: {employee.doj}", section_content_style))
-            elements.append(Paragraph(f"Address: {employee.address}", section_content_style))
-            elements.append(Paragraph(f"City: {employee.city}", section_content_style))
-            elements.append(Paragraph(f"State: {employee.state}", section_content_style))
-            elements.append(Paragraph(f"Team: {employee.team}", section_content_style))
-            elements.append(Paragraph(f"Salary: {employee.salary}", section_content_style))
+            elements.append(
+                Paragraph(f"Phone: {employee.phone}", section_content_style))
+            elements.append(
+                Paragraph(f"Date of Birth: {employee.dob}", section_content_style))
+            elements.append(
+                Paragraph(f"Date of Join: {employee.doj}", section_content_style))
+            elements.append(
+                Paragraph(f"Address: {employee.address}", section_content_style))
+            elements.append(
+                Paragraph(f"City: {employee.city}", section_content_style))
+            elements.append(
+                Paragraph(f"State: {employee.state}", section_content_style))
+            elements.append(
+                Paragraph(f"Team: {employee.team}", section_content_style))
+            elements.append(
+                Paragraph(f"Salary: {employee.salary}", section_content_style))
 
-            elements.append(Spacer(1, 24))  # Add space between employee sections
+            # Add space between employee sections
+            elements.append(Spacer(1, 24))
 
         # Build the PDF file
         doc.build(elements)
@@ -74,10 +81,9 @@ class DownloadEmployeesPDFView(View):
         return response
 
 
-
 class DownloadEmployeesView(View):
     def get(self, request):
-        employees = Employee.objects.all()
+        employees = Employee.objects.all().order_by('name')
 
         # Create a DataFrame from the employees queryset
         data = {
@@ -108,37 +114,6 @@ class DownloadEmployeesView(View):
         response.write(excel_file.getvalue())
 
         return response
-
-
-class EmployeeListView(View):
-    def get(self, request):
-        form = EmployeeForm()
-        employees = Employee.objects.all().order_by('-created_at')
-        sort = request.GET.get('sort')
-        order = request.GET.get('order')
-        if sort == 'name':
-            employees = employees.order_by('name')
-        elif sort == 'doj':
-            employees = employees.order_by('doj')
-        elif sort == 'city':
-            employees = employees.order_by('city')
-        elif sort == 'state':
-            employees = employees.order_by('state')
-        elif sort == 'team':
-            employees = employees.order_by('team')
-        elif sort == 'salary':
-            employees = employees.order_by('salary')
-
-        if sort and order == 'desc':
-            employees = employees.reverse()
-        else:
-            order = 'asc'
-
-        paginator = Paginator(employees, per_page=settings.PAGINATION_PER_PAGE)
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        CurrentDate = datetime.now().date()
-        return render(request, 'employees.html', {'form': form, 'page_obj': page_obj, 'date': CurrentDate, 'sort': sort, 'order': order})
 
 
 class ManualEntry(View):
@@ -251,7 +226,7 @@ class EmployeeListView(View):
                 return redirect(reverse('employee_list'))
 
             except KeyError:
-                messages.error(request,"Missing file during Upload.")
+                messages.error(request, "Missing file during Upload.")
                 return redirect(reverse('employee_list'))
 
             except ValidationError as e:
@@ -263,3 +238,24 @@ class EmployeeListView(View):
                     request, f"Error processing the Excel file: {str(e)}")
                 return redirect(reverse('employee_list'))
         return redirect(reverse('employee_list'))
+
+
+class EmployeeUpdateView(View):
+    def patch(self, request):
+        try:
+            data = json.loads(request.body)
+            for change in data:
+                employee_id = change.get('employee_id')
+                field_name = change.get('field_name')
+                field_value = change.get('field_value')
+
+                if employee_id and field_name and field_value:
+                    employee = Employee.objects.get(id=employee_id)
+                    setattr(employee, field_name, field_value)
+                    employee.save()
+        except Employee.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Employee not found'})
+        except Exception:
+            return JsonResponse({'success': False, 'error': 'Error saving changes'})
+
+        return JsonResponse({'success': True})
