@@ -1,6 +1,7 @@
 
 from datetime import datetime
 import json
+import os
 import pandas as pd
 from reportlab.pdfgen import canvas
 from django.db import IntegrityError
@@ -20,6 +21,57 @@ from django.utils import timezone
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import PageTemplate, BaseDocTemplate, Frame
+
+class EmployeeRecordTemplate(BaseDocTemplate):
+    def __init__(self, filename, **kwargs):
+        BaseDocTemplate.__init__(self, filename, **kwargs)
+        self.addPageTemplates([
+            PageTemplate(
+                id='EmployeeRecord',
+                frames=[
+                    Frame(
+                        40,
+                        40,
+                        self.pagesize[0] - 80,
+                        self.pagesize[1] - 80,
+                        leftPadding=0,
+                        bottomPadding=0,
+                        rightPadding=0,
+                        topPadding=40,
+                    ),
+                    Frame(
+                        40,
+                        0,
+                        self.pagesize[0] - 80,
+                        40,
+                        leftPadding=0,
+                        bottomPadding=0,
+                        rightPadding=0,
+                        topPadding=0,
+                        id='header_frame',
+                    ),
+                ],
+                onPage=self.header_footer,
+            ),
+        ])
+
+    def header_footer(self, canvas, doc):
+        canvas.saveState()
+        canvas.setFont("Helvetica-Bold", 12)
+        canvas.drawRightString(
+            doc.pagesize[0] - 40,
+            doc.pagesize[1] - 20,
+            "EMPLOYEES DIRECTORY"
+        )
+        canvas.setFont("Helvetica", 10)
+        canvas.drawString(
+            40,
+            doc.pagesize[1] - 20,
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        )
+        canvas.restoreState()
 
 
 class DownloadEmployeesPDFView(View):
@@ -28,7 +80,9 @@ class DownloadEmployeesPDFView(View):
 
         # Create a BytesIO object to store the PDF file
         pdf_file = io.BytesIO()
-        doc = SimpleDocTemplate(pdf_file, pagesize=letter)
+
+        # Create the PDF document with custom template
+        doc = EmployeeRecordTemplate(pdf_file, pagesize=letter)
 
         # Define custom styles for the resume sections
         styles = getSampleStyleSheet()
@@ -72,14 +126,20 @@ class DownloadEmployeesPDFView(View):
         # Build the PDF file
         doc.build(elements)
 
-        # Create the HTTP response with the PDF file
-        date = timezone.now().strftime('%Y-%m-%d_%H-%M-%S')
+        # Save the PDF file to the media folder
+        date = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        filename = f'EmployeesRecord_{date}.pdf'
+        file_path = os.path.join(settings.MEDIA_ROOT, 'pdf', filename)
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        with open(file_path, 'wb') as file:
+            file.write(pdf_file.getvalue())
+
+        # Create the HTTP response
         response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = f'attachment; filename=EmployeesRecord_{date}.pdf'
+        response['Content-Disposition'] = f'attachment; filename={filename}'
         response.write(pdf_file.getvalue())
 
         return response
-
 
 class DownloadEmployeesView(View):
     def get(self, request):
@@ -106,11 +166,17 @@ class DownloadEmployeesView(View):
         excel_writer.close()
         excel_file.seek(0)
 
-        # Create the HTTP response with the Excel file
-        date = datetime.now()
-        response = HttpResponse(
-            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = f'attachment; filename=EmployeesRecords{date}.xlsx'
+        # Save the Excel file to the media folder
+        date = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        filename = f'EmployeesRecords_{date}.xlsx'
+        file_path = os.path.join(settings.MEDIA_ROOT, 'excel', filename)
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        with open(file_path, 'wb') as file:
+            file.write(excel_file.getvalue())
+
+        # Create the HTTP response
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = f'attachment; filename={filename}'
         response.write(excel_file.getvalue())
 
         return response
