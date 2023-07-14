@@ -1,4 +1,4 @@
-
+from django.db.models import Q
 from datetime import datetime
 import json
 import os
@@ -143,7 +143,7 @@ class DownloadEmployeesPDFView(View):
 
 class DownloadEmployeesView(View):
     def get(self, request):
-        employees = Employee.objects.all().order_by('name')
+        employees = Employee.objects.all().order_by('id')
 
         # Create a DataFrame from the employees queryset
         data = {
@@ -207,12 +207,25 @@ class ManualEntry(View):
 
 
 class EmployeeListView(View):
+
     def get(self, request):
         form = EmployeeForm()
-        employees = Employee.objects.all().order_by('-created_at')
+        employees = Employee.objects.all().order_by('-id')
         sort = request.GET.get('sort')
         order = request.GET.get('order')
-        if sort == 'name':
+        search_query = request.GET.get('search')
+
+        if search_query:
+            employees = employees.filter(
+                Q(name__icontains=search_query) |   # Search by name
+                Q(city__icontains=search_query) |   # Search by city
+                Q(state__icontains=search_query) |  # Search by state
+                Q(team__icontains=search_query)     # Search by team
+            )
+
+        if sort == 'id':
+            employees = employees.order_by('id')
+        elif sort == 'name':
             employees = employees.order_by('name')
         elif sort == 'doj':
             employees = employees.order_by('doj')

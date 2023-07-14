@@ -12,31 +12,30 @@
 <div class="container-fluid" style="font-family: 'Prompt', sans-serif;">
     <div class="row">
       <div class="d-flex col-md-6 mt-4" style="padding-left: 2%;">
-        <button id="fileUploadBtn" class="btn text-white" style="margin-right: 2%; background-color: #0D4C92;">Import Excel</button>
-        <a href="{% url 'manualEntry' %}" class="btn text-white" style="margin-right: 2%; background-color: #0D4C92;">Add Manually</a>
-        <a href="{% url 'download_employees' %}?format=csv" class="btn text-white" style="margin-right: 2%; background-color: #1F8A70;">Download Excel</a>
-        <a href="{% url 'download_pdf' %}?format=csv" class="btn text-white" style="background-color: #D61355;">Download PDF</a>
+        <button id="fileUploadBtn" class="btn btn-outline-primary" style="margin-right: 2%;">Import Excel</button>
+        <a href="{% url 'manualEntry' %}" class="btn btn-outline-primary" style="margin-right: 2%;">Add Manually</a>
+        <a href="{% url 'download_employees' %}?format=csv" class="btn btn-outline-success" style="margin-right: 2%;">Download Excel</a>
+        <a href="{% url 'download_pdf' %}?format=csv" class="btn btn-outline-danger">Download PDF</a>
       </div>
       <div class="d-flex col-md-4 mt-4">
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search employee" style="padding-left: 2.375rem;">
-            <div class="input-group-append">
-                <button class="btn" type="button" style="background-color:#0D4C92;">
-                    <i class="fa fa-search" style="color: white;"></i>
-                </button>
+        <form method="get">
+            <div class="input-group">
+                <input type="text" class="form-control" name="search" placeholder="Search employee" style="padding-left: 2.375rem;">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-primary" type="submit" style="background-color:#0D4C92;">
+                        <i class="fa fa-search" style="color: white;"></i>
+                    </button>
+                </div>
             </div>
-        </div>
-        
-    </div>
-      <div class="d-flex col-md-2 pr-0 flex-row=reverse" style="margin-top: 2%;">
-
+        </form>
+    </div>    
+    <div class="d-flex col-md-2 pr-0 flex-row=reverse" style="margin-top: 2%;">
         <span id="edit-toggle">View Mode</span>
         <div class="custom-control ml-2 custom-switch">
             <input type="checkbox" class="custom-control-input" id="customSwitches" onchange="toggleEditMode()">
             <label class="custom-control-label" for="customSwitches"></label>
             </body>
       </div>
-      
     </div>
     <div>
       {% if messages %}
@@ -49,8 +48,8 @@
       <form id="fileUploadForm" class="mt-5 col-md-12 border p-4" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="file" class="form-control" id="fileUploadInput" name="files" accept=".xlsx">
-        <button type="submit" name="excel_form_submit" class="mt-3 btn text-white text-center" style="width: 250px; background-color: #1f8a70;" >Upload</button>
-        <a href="{%url 'employee_list' %}" class="btn text-white mt-3 text-center" style="background-color: #D61355; font-family: 'Prompt', sans-serif;">Cancel</a>
+        <button type="submit" name="excel_form_submit" class="mt-3 btn btn-outline-success text-center" style="width: 250px;" >Upload</button>
+        <a href="{%url 'employee_list' %}" class="btn mt-3 btn-outline-danger ext-center" style="font-family: 'Prompt', sans-serif;">Cancel</a>
       </form>
       {% if upload_success %}
       <p class="success-message">{{ upload_success }}</p>
@@ -70,6 +69,21 @@
 
         <thead class="text-white" style="background-color: #0D4C92; ">
             <tr>
+                <th>
+                    Emp ID
+                    <a href="?sort=id{% if sort == 'id' and order == 'asc' %}&order=desc{% endif %}"
+                        style="margin-left: 5%; text-decoration: none; color: white;">
+                        {% if sort == 'id' %}
+                        {% if order == 'asc' %}
+                        <span>&uarr;</span>
+                        {% else %}
+                        <span>&darr;</span>
+                        {% endif %}
+                        {% else %}
+                        <span>&darr;</span>
+                        {% endif %}
+                    </a>
+                </th>
                 <th>
                     Name
                     <a href="?sort=name{% if sort == 'name' and order == 'asc' %}&order=desc{% endif %}"
@@ -169,6 +183,8 @@
         <tbody class="thead-light">
             {% for employee in page_obj %}
             <tr style="font-size: 12px;" data-employee-id="{{ employee.id }}">
+                
+                <td>{{ employee.id }}</td>
                 <td {% if not employee.editable %}contenteditable="false"{% endif %} data-field-name="name">{{ employee.name }}</td>
                 <td {% if not employee.editable %}contenteditable="false"{% endif %} data-field-name="phone">{{ employee.phone }}</td>
                 <td {% if not employee.editable %}contenteditable="false"{% endif %} data-field-name="dob">{{ employee.dob }}</td>
@@ -187,18 +203,18 @@
     <div class="text-center">
         <div class="pagination">
             {% if page_obj.has_previous %}
-            <a href="?page=1" class="btn text-white" style="background-color: #0D4C92;">&laquo; First</a>
-            <a href="?page={{ page_obj.previous_page_number }}" class="btn text-white"
-                style="background-color: #0D4C92; margin-right: 2%; margin-left: 2%;">Previous</a>
+            <a href="?page=1" class="btn btn-outline-primary" >&laquo; First</a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-primary"
+                style="margin-right: 2%; margin-left: 2%;">Previous</a>
             {% endif %}
-            <div class="current-page-box text-white" style="padding: 5px 15px; display: inline-block; background-color: #1F8A70;">
-                <span class="current-page text-white" style="margin-left: 1% 2% 2%;">{{ page_obj.number }}</span>
+            <div class="current-page-box btn-success" style="padding: 5px 15px; display: inline-block;">
+                <span class="current-page " style="margin-left: 1% 2% 2%;">{{ page_obj.number }}</span>
             </div>
             {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}" class="btn text-white"
-                style=" background-color: #0D4C92; margin-right: 2%; margin-left: 2%;">Next</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}" class="btn text-white"
-                style="background-color: #0D4C92;">Last &raquo;</a>
+            <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-primary"
+                style=" margin-right: 2%; margin-left: 2%;">Next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-primary"
+                >Last &raquo;</a>
             {% endif %}
         </div>
 
