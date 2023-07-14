@@ -218,6 +218,7 @@ class EmployeeListView(View):
         if search_query:
             employees = employees.filter(
                 Q(name__icontains=search_query) |   # Search by name
+                Q(id__icontains=search_query) |   # Search by name
                 Q(city__icontains=search_query) |   # Search by city
                 Q(state__icontains=search_query) |  # Search by state
                 Q(team__icontains=search_query)     # Search by team

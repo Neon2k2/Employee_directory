@@ -13,27 +13,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-function toggleEditMode() {
-    var tableRows = document.getElementsByTagName('tr');
-    var editToggle = document.getElementById('edit-toggle');
-    if (editToggle.innerHTML === 'View Mode') {
-      editToggle.innerHTML = 'Edit Mode';
-      for (var i = 0; i < tableRows.length; i++) {
-        var cells = tableRows[i].getElementsByTagName('td');
-        for (var j = 0; j < cells.length; j++) {
-          cells[j].setAttribute('contenteditable', 'true');
-        }
-      }
-    } else {
-      editToggle.innerHTML = 'View Mode';
-      for (var i = 0; i < tableRows.length; i++) {
-        var cells = tableRows[i].getElementsByTagName('td');
-        for (var j = 0; j < cells.length; j++) {
-          cells[j].setAttribute('contenteditable', 'false');
-        }
-      }
-    }
-  }
 
   var changes = []; // Global array to store changes
 
