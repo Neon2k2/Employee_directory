@@ -90,9 +90,9 @@ class DownloadEmployeesPDFView(View):
         section_content_style = ParagraphStyle(
             'section_content',
             parent=styles['Normal'],
-            fontSize=12,
+            fontSize=11,
             leading=14,
-            spaceAfter=10
+            spaceAfter=7
         )
 
         # Generate the resume sections for each employee
