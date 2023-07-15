@@ -8,4 +8,5 @@ urlpatterns = [
     path('downloadpdf/', DownloadEmployeesPDFView.as_view(), name='download_pdf'),
     path('manualEntry/', ManualEntry.as_view(), name='manualEntry'),
     path('update/', EmployeeUpdateView.as_view(), name='update_employee'),
+
 ]

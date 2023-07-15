@@ -206,6 +206,7 @@ class ManualEntry(View):
             return render(request, 'manualentry.html', {'form': form})
 
 
+
 class EmployeeListView(View):
 
     def get(self, request):
