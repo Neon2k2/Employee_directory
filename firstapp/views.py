@@ -3,7 +3,6 @@ from datetime import datetime
 import json
 import os
 import pandas as pd
-from reportlab.pdfgen import canvas
 from django.db import IntegrityError
 from django.forms import ValidationError
 from django.urls import reverse
@@ -17,12 +16,11 @@ import io
 from django.conf import settings
 from django.contrib import messages
 from django.core.paginator import Paginator
-from django.utils import timezone
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import Paragraph, Spacer
 from reportlab.platypus import PageTemplate, BaseDocTemplate, Frame
+
 
 class EmployeeRecordTemplate(BaseDocTemplate):
     def __init__(self, filename, **kwargs):
@@ -141,6 +139,7 @@ class DownloadEmployeesPDFView(View):
 
         return response
 
+
 class DownloadEmployeesView(View):
     def get(self, request):
         employees = Employee.objects.all().order_by('id')
@@ -175,7 +174,8 @@ class DownloadEmployeesView(View):
             file.write(excel_file.getvalue())
 
         # Create the HTTP response
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response = HttpResponse(
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Content-Disposition'] = f'attachment; filename={filename}'
         response.write(excel_file.getvalue())
 
@@ -204,7 +204,6 @@ class ManualEntry(View):
         else:
             # Form is invalid, display error messages
             return render(request, 'manualentry.html', {'form': form})
-
 
 
 class EmployeeListView(View):
@@ -254,9 +253,16 @@ class EmployeeListView(View):
     def post(self, request):
 
         if 'excel_form_submit' in request.POST:
+
+            max_file_size = 1024 * 1024
             # Handle file upload and Excel processing here...
             try:
+                # Ensure the file size is within the limit
                 file = request.FILES['files']
+                if file.size > max_file_size:
+                    error_message = "Error: The file size exceeds the maximum allowed limit (1 MB)."
+                    messages.error(request, error_message)
+                    return redirect(reverse('employee_list'))
 
                 # Save the uploaded Excel file
                 obj = ExcelFile.objects.create(file_upload=file)
