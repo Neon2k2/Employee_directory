@@ -7,7 +7,7 @@ from django.db import IntegrityError
 from django.forms import ValidationError
 from django.urls import reverse
 import openpyxl
-from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.views import View
 from .forms import EmployeeForm
@@ -76,13 +76,10 @@ class DownloadEmployeesPDFView(View):
     def get(self, request):
         employees = Employee.objects.all().order_by('name')
 
-        # Create a BytesIO object to store the PDF file
         pdf_file = io.BytesIO()
 
-        # Create the PDF document with custom template
         doc = EmployeeRecordTemplate(pdf_file, pagesize=letter)
 
-        # Define custom styles for the resume sections
         styles = getSampleStyleSheet()
         section_title_style = styles['Heading1']
         section_content_style = ParagraphStyle(
@@ -93,14 +90,11 @@ class DownloadEmployeesPDFView(View):
             spaceAfter=7
         )
 
-        # Generate the resume sections for each employee
         elements = []
         for employee in employees:
-            # Add employee name as section title
             elements.append(Paragraph(employee.name, section_title_style))
-            elements.append(Spacer(1, 12))  # Add space after the section title
+            elements.append(Spacer(1, 12))
 
-            # Add employee details as section content
             elements.append(
                 Paragraph(f"Phone: {employee.phone}", section_content_style))
             elements.append(
@@ -118,13 +112,12 @@ class DownloadEmployeesPDFView(View):
             elements.append(
                 Paragraph(f"Salary: {employee.salary}", section_content_style))
 
-            # Add space between employee sections
+
             elements.append(Spacer(1, 24))
 
-        # Build the PDF file
+
         doc.build(elements)
 
-        # Save the PDF file to the media folder
         date = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         filename = f'EmployeesRecord_{date}.pdf'
         file_path = os.path.join(settings.MEDIA_ROOT, 'pdf', filename)
@@ -132,7 +125,6 @@ class DownloadEmployeesPDFView(View):
         with open(file_path, 'wb') as file:
             file.write(pdf_file.getvalue())
 
-        # Create the HTTP response
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = f'attachment; filename={filename}'
         response.write(pdf_file.getvalue())
@@ -144,7 +136,6 @@ class DownloadEmployeesView(View):
     def get(self, request):
         employees = Employee.objects.all().order_by('id')
 
-        # Create a DataFrame from the employees queryset
         data = {
             'Name': [employee.name for employee in employees],
             'Phone': [employee.phone for employee in employees],
@@ -158,14 +149,13 @@ class DownloadEmployeesView(View):
         }
         df = pd.DataFrame(data)
 
-        # Create a BytesIO object to store the Excel file
         excel_file = io.BytesIO()
         excel_writer = pd.ExcelWriter(excel_file, engine='xlsxwriter')
         df.to_excel(excel_writer, index=False, sheet_name='Employees')
         excel_writer.close()
         excel_file.seek(0)
 
-        # Save the Excel file to the media folder
+
         date = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         filename = f'EmployeesRecords_{date}.xlsx'
         file_path = os.path.join(settings.MEDIA_ROOT, 'excel', filename)
@@ -173,7 +163,6 @@ class DownloadEmployeesView(View):
         with open(file_path, 'wb') as file:
             file.write(excel_file.getvalue())
 
-        # Create the HTTP response
         response = HttpResponse(
             content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Content-Disposition'] = f'attachment; filename={filename}'
@@ -187,7 +176,7 @@ class ManualEntry(View):
         form = EmployeeForm()
         return render(request, 'manualentry.html', {'form': form})
 
-    def post(self, request):  # Fix: lowercase "p" in "post" method name
+    def post(self, request): 
         form = EmployeeForm(request.POST)
         if form.is_valid():
             employee = form.save(commit=False)
@@ -202,7 +191,7 @@ class ManualEntry(View):
                 request, 'Employee added successfully to the database.')
             return redirect(reverse('employee_list'))
         else:
-            # Form is invalid, display error messages
+
             return render(request, 'manualentry.html', {'form': form})
 
 
@@ -211,17 +200,18 @@ class EmployeeListView(View):
     def get(self, request):
         form = EmployeeForm()
         employees = Employee.objects.all().order_by('-id')
+        count = Employee.objects.count()
         sort = request.GET.get('sort')
         order = request.GET.get('order')
         search_query = request.GET.get('search')
 
         if search_query:
             employees = employees.filter(
-                Q(name__icontains=search_query) |   # Search by name
-                Q(id__icontains=search_query) |   # Search by name
-                Q(city__icontains=search_query) |   # Search by city
-                Q(state__icontains=search_query) |  # Search by state
-                Q(team__icontains=search_query)     # Search by team
+                Q(name__icontains=search_query) | 
+                Q(id__icontains=search_query) |   
+                Q(city__icontains=search_query) |   
+                Q(state__icontains=search_query) |  
+                Q(team__icontains=search_query) 
             )
 
         if sort == 'id':
@@ -247,35 +237,25 @@ class EmployeeListView(View):
         paginator = Paginator(employees, per_page=settings.PAGINATION_PER_PAGE)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
-        CurrentDate = datetime.now().date()
-        return render(request, 'employees.html', {'form': form, 'page_obj': page_obj, 'date': CurrentDate, 'sort': sort, 'order': order})
+        return render(request, 'employees.html', {'form': form, 'page_obj': page_obj, 'count': count, 'sort': sort, 'order': order})
 
     def post(self, request):
 
         if 'excel_form_submit' in request.POST:
-
             max_file_size = 1024 * 1024
-            # Handle file upload and Excel processing here...
             try:
-                # Ensure the file size is within the limit
                 file = request.FILES['files']
                 if file.size > max_file_size:
                     error_message = "Error: The file size exceeds the maximum allowed limit (1 MB)."
                     messages.error(request, error_message)
                     return redirect(reverse('employee_list'))
-
-                # Save the uploaded Excel file
                 obj = ExcelFile.objects.create(file_upload=file)
                 path = obj.file_upload.path
-
-                # Read the data from the Excel file
                 workbook = openpyxl.load_workbook(path)
                 worksheet = workbook.active
-
                 data = []
                 for idx, row in enumerate(worksheet.iter_rows(values_only=True), start=1):
                     if idx == 1:
-                        # Skip the header row
                         continue
 
                     dob_str = datetime.strftime(row[2], '%Y-%m-%d')
@@ -294,19 +274,17 @@ class EmployeeListView(View):
                     }
                     data.append(employee_data)
 
-                # Create Employee objects from the data
                 for employee_data in data:
                     try:
                         Employee.objects.create(**employee_data)
                     except IntegrityError as e:
                         error_message = f"Error creating employee: This employee already exists."
                         messages.error(request, error_message)
-                        # Redirect to employee list page with the error message
+
                         return redirect(reverse('employee_list'))
                     except Exception as e:
                         error_message = f"Error creating employee: {str(e)}"
                         messages.error(request, error_message)
-                        # Redirect to employee list page with the error message
                         return redirect(reverse('employee_list'))
 
                 messages.success(request, 'Excel File uploaded successfully')
