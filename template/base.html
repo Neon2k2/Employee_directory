@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  {% load bootstrap5 %}
+  {% bootstrap_css %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="{% static 'employees.css' %}">
+  <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
+    rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <title>{% block title %}Employees Data{% endblock title %}</title>
+</head>
+
+<body>
+  <header class="p-3 text-white border" style="background-color: #0D4C92;">
+    <div class="container-fluid d-flex align-items-center">
+        <i class="fa fa-address-book mr-2" style="font-size: 24px;"></i>
+        <h2 style="font-family: 'Prompt', sans-serif; font-size: 24px; margin: 0;">Employees Directory</h2>
+        {% if user.is_authenticated %}
+          <div class="ml-auto">
+            <a class="btn btn-outline-light" href="{% url 'logout' %}">Logout</a>
+          </div> 
+        {% endif %}
+    </div>
+</header>
+  <main>
+    {% block content %}
+    {% endblock content %}
+  </main>
+  <footer>
+    <script src="{% static 'employees.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function() {
+          $('#searchInput').on('input', function() {
+              var searchQuery = $(this).val();
+              
+              $.ajax({
+                  url: '/search/',  // Replace with the URL of your search endpoint
+                  method: 'GET',
+                  data: { search: searchQuery },
+                  success: function(response) {
+                      $('#tableBodyContent').html(response);
+                  },
+                  error: function(xhr, status, error) {
+                      console.log(error);
+                  }
+              });
+          });
+      });
+
+      
+  </script>
+  
+  
+  
+  
+
+  </footer>
+</body>
+
+</html>
