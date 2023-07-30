@@ -3,6 +3,17 @@ from django.db import models
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 
+
+class User(models.Model):
+    username = models.CharField(max_length=100, unique=True)
+    password = models.CharField(max_length=128)
+    email = models.EmailField(unique=True)
+    # Add other fields as needed for your application
+
+    def __str__(self):
+        return self.username
+
+
 class Employee(models.Model):
     phone_regex = RegexValidator(
         regex=r'^\+?91?[6-9]\d{9}$',

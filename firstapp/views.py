@@ -9,7 +9,6 @@ from django.urls import reverse
 import openpyxl
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
-from django.views import View
 from .forms import EmployeeForm
 from .models import Employee, ExcelFile
 import io
@@ -20,6 +19,37 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import Paragraph, Spacer
 from reportlab.platypus import PageTemplate, BaseDocTemplate, Frame
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views import View
+from django.contrib.auth.views import LoginView, LogoutView
+
+
+
+class AdminRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_authenticated and self.request.user.is_superuser
+
+
+class CustomLogoutView(LogoutView):
+    next_page = '/login/'
+
+
+class CustomLoginView(LoginView):
+    template_name = 'login.html'  # Specify your login template path here
+
+    def form_valid(self, form):
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        user = authenticate(self.request, username=username, password=password)
+        if user is not None and user.is_superuser:
+            login(self.request, user)
+            return redirect('employee_list')
+        else:
+            error_message = "Invalid admin credentials."
+            return render(self.request, self.template_name, {'error_message': error_message})
 
 
 class EmployeeRecordTemplate(BaseDocTemplate):
@@ -72,7 +102,8 @@ class EmployeeRecordTemplate(BaseDocTemplate):
         canvas.restoreState()
 
 
-class DownloadEmployeesPDFView(View):
+class DownloadEmployeesPDFView(LoginRequiredMixin, View):
+    login_url = '/login/'
     def get(self, request):
         employees = Employee.objects.all().order_by('name')
 
@@ -132,7 +163,8 @@ class DownloadEmployeesPDFView(View):
         return response
 
 
-class DownloadEmployeesView(View):
+class DownloadEmployeesView(LoginRequiredMixin, View):
+    login_url = '/login/'
     def get(self, request):
         employees = Employee.objects.all().order_by('id')
 
@@ -171,7 +203,7 @@ class DownloadEmployeesView(View):
         return response
 
 
-class ManualEntry(View):
+class ManualEntry(LoginRequiredMixin, View):
     def get(self, request):
         form = EmployeeForm()
         return render(request, 'manualentry.html', {'form': form})
@@ -195,8 +227,8 @@ class ManualEntry(View):
             return render(request, 'manualentry.html', {'form': form})
 
 
-class EmployeeListView(View):
-
+class EmployeeListView(LoginRequiredMixin, View):
+    login_url = '/login/'
     def get(self, request):
         form = EmployeeForm()
         employees = Employee.objects.all().order_by('-id')
@@ -305,7 +337,8 @@ class EmployeeListView(View):
         return redirect(reverse('employee_list'))
 
 
-class EmployeeUpdateView(View):
+class EmployeeUpdateView(LoginRequiredMixin, View):
+    login_url = '/login/'
     def patch(self, request):
         try:
             data = json.loads(request.body)
