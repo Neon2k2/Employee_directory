@@ -10,7 +10,7 @@
 
 {% block content %}
 
-<div class="container" style="margin-bottom: 10%;">
+<div class="container" style="margin-bottom: 10%; font-family: 'Prompt', sans-serif;">
     
     <div class="row">
         
@@ -30,65 +30,65 @@
             </div>
             {% endif %}
             <div class="row mb-3 pt-2 text-center text-white" style="background-color: #0D4C92;">
-                <h5 style="font-family: 'Prompt', sans-serif;">Enter the Details</h5>
+                <h5 >Enter the Details</h5>
             </div>
             <div class="row">
-                <div class="col-sm-6 mb-3" style="font-family: 'Prompt', sans-serif;">
+                <div class="col-sm-6 mb-3" >
                     {{ form.name.label_tag }}
                     {{ form.name }}
                 </div>
-                <div class="col-sm-6 mb-3"style="font-family: 'Prompt', sans-serif;">
+                <div class="col-sm-6 mb-3">
                     {{ form.phone.label_tag }}
                     {{ form.phone }}
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-sm-6 mb-3"style="font-family: 'Prompt', sans-serif;">
+                <div class="col-sm-6 mb-3">
                     {{ form.gender.label_tag }}
                     {{ form.gender }}
                 </div>
-                <div class="col-sm-6 mb-3"style="font-family: 'Prompt', sans-serif;">
+                <div class="col-sm-6 mb-3">
                     {{ form.dob.label_tag }}
                     {{ form.dob }}
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-sm-6 mb-3"style="font-family: 'Prompt', sans-serif;">
+                <div class="col-sm-6 mb-3">
                     {{ form.address.label_tag }}
                     {{ form.address }}
                 </div>
-                <div class="col-sm-6 mb-3"style="font-family: 'Prompt', sans-serif;">
+                <div class="col-sm-6 mb-3">
                     {{ form.city.label_tag }}
                     {{ form.city }}
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-sm-6 mb-3"style="font-family: 'Prompt', sans-serif;">
+                <div class="col-sm-6 mb-3">
                     {{ form.state.label_tag }}
                     {{ form.state }}
                 </div>
-                <div class="col-sm-6 mb-3"style="font-family: 'Prompt', sans-serif;">
+                <div class="col-sm-6 mb-3">
                     {{ form.team.label_tag }}
                     {{ form.team }}
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-sm-6 mb-3"style="font-family: 'Prompt', sans-serif;">
+                <div class="col-sm-6 mb-3">
                     {{ form.salary.label_tag }}
                     {{ form.salary }}
                 </div>
-                <div class="col-sm-6 mb-3"style="font-family: 'Prompt', sans-serif;">
+                <div class="col-sm-6 mb-3">
                     {{ form.doj.label_tag }}
                     {{ form.doj }}
                 </div>
             </div>
 
-            <button type="submit" name="employee_form_submit" class="btn btn-outline-success" style="font-family: 'Prompt', sans-serif;">Add New Employee</button>
-            <a href="{%url 'employee_list' %}" class="btn btn-outline-danger" style="font-family: 'Prompt', sans-serif;">Cancel</a>
+            <button type="submit" name="employee_form_submit" class="btn btn-outline-success" >Add New Employee</button>
+            <a href="{%url 'employee_list' %}" class="btn btn-outline-danger" >Cancel</a>
         </form>
         
     </div>

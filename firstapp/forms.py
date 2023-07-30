@@ -192,6 +192,7 @@ class EmployeeForm(forms.ModelForm):
             raise forms.ValidationError("Salary must be a positive value.")
         return salary
     
+    
     def clean_phone(self):
         phone = self.cleaned_data.get('phone')
         pattern = r'^\+?91?[6-9]\d{9}$'
