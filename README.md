@@ -5,12 +5,15 @@ The Employee Directory Web Application is a simple web-based tool that allows us
 
 ##Screenshots
 
-![DashBoard](screenshots/dashboard.png)
-![editMode](screenshots/editMode.png)
-![importExcel](screenshots/importExcel.png)
-![DashBoard](screenshots/dashboard.png)
+![loginPage](screenshots/loginPage.png)
+
 ![DashBoard](screenshots/dashboard.png)
 
+![editMode](screenshots/editMode.png)
+
+![importExcel](screenshots/importExcel.png)
+
+![manual](screenshots/manual.png)
 
 
 ## Features
