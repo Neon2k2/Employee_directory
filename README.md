@@ -3,7 +3,7 @@
 The Employee Directory Web Application is a simple web-based tool that allows users to manage and view a list of employees. It provides features for importing employees from an Excel file, adding employees manually, and searching for specific employees. Users can also edit employee details and download the employee list in Excel and PDF formats.
 
 
-##Screenshots
+## Screenshots
 
 ![loginPage](screenshots/loginPage.png)
 
