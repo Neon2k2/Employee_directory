@@ -62,13 +62,19 @@ pip install -r requirements.txt
 python manage.py migrate
 ```
 
-6. Start the development server:
+6. Create A superuser to able to login into the app:
+
+```bash
+python manage.py createsuperuser
+```
+
+7. Start the development server:
 
 ```bash
 python manage.py runserver
 ```
 
-7. Access the web application in your browser at http://localhost:8000/.
+8. Access the web application in your browser at http://localhost:8000/.
 
 ## Usage
 
