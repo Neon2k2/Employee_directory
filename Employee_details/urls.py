@@ -19,5 +19,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', LoginView.as_view(), name='login'),
     path('', include('firstapp.urls')),
 ]
