@@ -62,7 +62,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Employee_details.wsgi.application'
 
-# Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
