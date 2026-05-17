@@ -4,6 +4,5 @@ from firstapp.views import LoginView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', LoginView.as_view(), name='login'),
     path('', include('firstapp.urls')),
 ]
