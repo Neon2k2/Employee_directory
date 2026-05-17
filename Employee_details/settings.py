@@ -30,7 +30,7 @@ INSTALLED_APPS = [
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'template')],  # make sure folder name is correct
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # make sure folder name is correct
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
